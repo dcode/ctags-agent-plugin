@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "ctags",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Universal/Exuberant Ctags symbol tools (search_symbols, list_symbols, generate_ctags) as an agent-agnostic MCP server.",
   "author": {
     "name": "Derek Ditch"
