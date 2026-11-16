@@ -1,0 +1,98 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  verify-and-test:
+    name: Verify Version & Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Compare git tag with plugin.json version
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          version="$(python3 -c 'import json; print(json.load(open("plugin.json"))["version"])')"
+          if [ "v${version}" != "${TAG}" ]; then
+            echo "::error::Tag ${TAG} does not match plugin.json version v${version}"
+            exit 1
+          fi
+
+      - name: Install Universal Ctags
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y universal-ctags
+          ctags --version
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run pre-commit checks
+        run: uv run pre-commit run --all-files
+
+      - name: Validate Agent Plugins Specification
+        run: |
+          uvx check-jsonschema --schemafile https://agent-plugins.org/schemas/1.0.0/plugin.schema.json plugin.json
+          uvx check-jsonschema --schemafile https://agent-plugins.org/schemas/1.0.0/mcp.schema.json mcp.json
+          uv run python scripts/validate_spec.py .
+
+      - name: Run Test Suite
+        run: uv run pytest --cov-fail-under=80
+
+  publish-release:
+    name: Build Artifacts & Publish Release
+    needs: verify-and-test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build Python distribution (wheel and sdist)
+        run: uv build
+
+      - name: Package Agent Plugin distribution zip
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          zip -r "dist/ctags-agent-plugin-${TAG}.zip" \
+            plugin.json \
+            mcp.json \
+            server/ \
+            README.md \
+            LICENSE \
+            -x "*/__pycache__/*"
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: gh release create "${TAG}" dist/* --title "${TAG}" --generate-notes --verify-tag

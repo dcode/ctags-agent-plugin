@@ -44,3 +44,6 @@ jobs:
 
       - name: Run Test Suite
         run: uv run pytest --cov-fail-under=80
+
+      - name: Build packages (wheel and sdist)
+        run: uv build
