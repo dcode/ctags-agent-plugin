@@ -17,6 +17,13 @@ repos:
         args: [--fix]
       - id: ruff-format
 
+  # Markdown linting and formatting via rumdl
+  - repo: https://github.com/rvben/rumdl-pre-commit
+    rev: v0.3.4
+    hooks:
+      - id: rumdl
+      - id: rumdl-fmt
+
   # Schema validation for Agent Plugins spec
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.31.0

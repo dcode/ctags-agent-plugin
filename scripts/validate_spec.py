@@ -255,7 +255,15 @@ def validate_plugin(root_dir: Path) -> list[str]:
                     )
 
     # 6. Check for directory traversal / containment of package files
-    ignored_package_dirs = {".git", ".venv", "venv", ".pytest_cache", ".ruff_cache", "__pycache__"}
+    ignored_package_dirs = {
+        ".git",
+        ".venv",
+        "venv",
+        ".pytest_cache",
+        ".ruff_cache",
+        ".rumdl_cache",
+        "__pycache__",
+    }
     for item in root_dir.rglob("*"):
         if any(part in ignored_package_dirs for part in item.parts):
             continue

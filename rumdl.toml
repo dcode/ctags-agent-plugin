@@ -1,0 +1,37 @@
+# rumdl configuration: https://github.com/rvben/rumdl
+#
+#   rumdl check .   # lint
+#   rumdl fmt .     # apply auto-fixes
+
+[global]
+# GitHub-flavored Markdown (tables, task lists, autolinks).
+flavor = "gfm"
+
+# Line length: 120 columns for prose and headings. Code blocks and tables are
+# exempt because wrapping them changes their meaning or breaks rendering.
+[MD013]
+line-length = 120
+code-blocks = false
+tables = false
+headings = true
+
+# Pin the styles the repo already uses so fixes stay consistent.
+[MD003]
+style = "atx"          # `# Heading`, not underlined headings
+
+[MD004]
+style = "dash"         # `- item` bullets
+
+[MD046]
+style = "fenced"       # fenced code blocks, not indented ones
+
+[MD048]
+style = "backtick"     # ``` fences, not ~~~
+
+[MD050]
+style = "asterisk"     # **strong**, not __strong__
+
+# Repeated headings are fine as long as they live under different parents
+# (e.g. "Usage" under several sections).
+[MD024]
+siblings-only = true

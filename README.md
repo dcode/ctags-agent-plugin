@@ -1,6 +1,7 @@
 # ctags-agent-plugin
 
-An [Agent Plugins](https://agent-plugins.org/) compliant plugin providing Universal / Exuberant Ctags symbol tools (`search_symbols`, `list_symbols`, `generate_ctags`) via Model Context Protocol (MCP).
+An [Agent Plugins](https://agent-plugins.org/) compliant plugin providing Universal / Exuberant Ctags symbol tools
+(`search_symbols`, `list_symbols`, `generate_ctags`) via Model Context Protocol (MCP).
 
 ## Tools
 
@@ -33,8 +34,10 @@ ctags-agent-plugin/
 └── tests/                   # Specification & server test suite
 ```
 
-- **Manifest (`plugin.json`)**: Declares plugin identity and metadata against `https://agent-plugins.org/schemas/1.0.0/plugin.schema.json`.
-- **MCP Configuration (`mcp.json`)**: Declares the stdio server against `https://agent-plugins.org/schemas/1.0.0/mcp.schema.json`, using `${PLUGIN_ROOT}` for bundled script resolution.
+- **Manifest (`plugin.json`)**: Declares plugin identity and metadata against
+  `https://agent-plugins.org/schemas/1.0.0/plugin.schema.json`.
+- **MCP Configuration (`mcp.json`)**: Declares the stdio server against
+  `https://agent-plugins.org/schemas/1.0.0/mcp.schema.json`, using `${PLUGIN_ROOT}` for bundled script resolution.
 - **Security & Containment**: All package paths remain safely confined within the plugin root directory.
 
 ## Client Usage
@@ -60,12 +63,15 @@ extensions:
 
 ### Any Agent Plugins Compliant Client
 
-Clients supporting the Agent Plugins standard discover `plugin.json` and load the MCP server configured in `mcp.json` automatically when pointing to this repository.
+Clients supporting the Agent Plugins standard discover `plugin.json` and load the MCP server configured
+in `mcp.json` automatically when pointing to this repository.
 
 ## Repository Scoping & Behavior
 
-- **Target Repository Root**: Scoped to `CTAGS_REPO_ROOT`, then `CLAUDE_PROJECT_DIR`, then the current working directory, widened to its Git top-level. All symbol operations are confined to this target repository root.
-- **Index File**: Searches for `tags`, `.tags`, or `.git/tags`. `generate_ctags` writes `tags` at the target repository root.
+- **Target Repository Root**: Scoped to `CTAGS_REPO_ROOT`, then `CLAUDE_PROJECT_DIR`, then the current working directory,
+  widened to its Git top-level. All symbol operations are confined to this target repository root.
+- **Index File**: Searches for `tags`, `.tags`, or `.git/tags`. `generate_ctags` writes `tags` at the target
+  repository root.
 
 ## Development & Verification
 

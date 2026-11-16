@@ -42,5 +42,6 @@ tags.temp
 .idea/
 .vscode/
 
-# Pre-commit cache
+# Pre-commit & linter cache
 .pre-commit/
+.rumdl_cache/
